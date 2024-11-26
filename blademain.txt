@@ -8,6 +8,7 @@ local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
 local abilitiesFolder = character:WaitForChild("Abilities")
 local UserInputService = game:GetService("UserInputService")
 local replicatedStorage = game:GetService("ReplicatedStorage")
+local VirtualInputManager = game:GetService("VirtualInputManager")
 local heartbeatConnection
 local upgrades = localPlayer.Upgrades
 local UseRage = false
@@ -70,7 +71,6 @@ local Skins = Window:CreateTab("Skins", 13014546637)
 local function startAutoParry()
     local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
     local ballsFolder = workspace:WaitForChild("Balls")
-    local parryButtonPress = replicatedStorage.Remotes.ParryButtonPress
     local abilityButtonPress = replicatedStorage.Remotes.AbilityButtonPress
 
     print("Script successfully ran.")
@@ -166,8 +166,7 @@ end
         local distanceToPlayer = (ball.Position - charPos).Magnitude
         local ballVelocityTowardsPlayer = ball.Velocity:Dot((charPos - ball.Position).Unit)
         
-        if distanceToPlayer < 10 then
-            parryButtonPress:Fire()
+        if distanceToPlayer < 10 then       VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0)
         end
         local isCheckingRage = false
 
@@ -176,13 +175,11 @@ end
                 if not isCheckingRage then
                     isCheckingRage = true
                     abilityButtonPress:Fire()
-                    if not isWalkSpeedZero() then
-                        parryButtonPress:Fire()
+                    if not isWalkSpeedZero() then                     VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0)
                     end
                     isCheckingRage = false
                 end
-            else
-                parryButtonPress:Fire()
+            else   VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, game, 0)
             end
         end
     end
